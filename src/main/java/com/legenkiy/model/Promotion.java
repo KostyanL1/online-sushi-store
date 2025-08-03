@@ -21,16 +21,15 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "title")
-    @NotBlank(message = "Поле для заголовку акції порожнє!")
-    @Size(min = 3, max = 25, message = "Довжина заголовку не може бути коротша ніж 3 та довша ніж 25!")
+    @NotBlank(message = "The promotion title field cannot be empty!")
+    @Size(min = 3, max = 25, message = "The promotion title must be between 3 and 25 characters long!")
     private String title;
     @Column(name = "description")
-    @NotBlank(message = "Поле для опису акції порожнє!")
-    @Size(min = 15, max = 300, message = "Довжина опису акції не може бути коротша ніж 15 та довша ніж 300!")
+    @NotBlank(message = "The promotion description field cannot be empty!")
+    @Size(min = 15, max = 300, message = "The promotion description must be between 15 and 300 characters long!")
     private String description;
     @Column(name = "image_url")
-    @URL(message = "Невірний формат для URL!")
+    @URL(message = "Invalid URL format!")
     private String imageUrl;
-
 
 }

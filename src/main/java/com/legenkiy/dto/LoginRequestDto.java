@@ -2,7 +2,6 @@ package com.legenkiy.dto;
 
 
 import lombok.*;
-import org.hibernate.event.spi.PreInsertEvent;
 
 @AllArgsConstructor
 @NoArgsConstructor
