@@ -1,10 +1,7 @@
 package com.legenkiy.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,11 +16,12 @@ public class Type {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
 
     @Column(name = "type")
-    @Size(min = 1, max = 20 , message = "Довжина типу продукту не може бути коротша ніж 1 та довша ніж 20!")
-    private String type;
+    @Size(min = 1, max = 20 , message = "The length of the product type must not be shorter than 1 or longer than 20!")
+    private String description;
 
 
 }

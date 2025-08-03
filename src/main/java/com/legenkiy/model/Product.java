@@ -14,39 +14,38 @@ import org.hibernate.validator.constraints.URL;
 @Data
 
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
     @Column(name = "name")
-    @NotBlank(message = "Поле для назви продукту порожнє!")
-    @Size(min = 1, max = 60, message = "Довжина назви продукту не може бути коротша ніж 1 та довша ніж 60!")
+    @NotBlank(message = "The product name field cannot be empty!")
+    @Size(min = 1, max = 60, message = "The product name must be between 1 and 60 characters long!")
     private String name;
 
     @Column(name = "description")
-    @NotBlank(message = "Поле для опису продукту порожнє!")
-    @Size(min = 15, max = 300, message = "Довжина опису продукту не може бути коротша ніж 15 та довша ніж 300!")
+    @NotBlank(message = "The product description field cannot be empty!")
+    @Size(min = 15, max = 300, message = "The product description must be between 15 and 300 characters long!")
     private String description;
 
-    @NotNull(message = "Ціна товару не може бути порожньою!")
-    @Min(value = 0, message = "Ціна товару не може бути від'ємною!")
-    @Max(value = 5000, message = "Ціна товару не може бути більшою ніж 5000!")
+    @NotNull(message = "The product price cannot be null!")
+    @Min(value = 0, message = "The product price cannot be negative!")
+    @Max(value = 5000, message = "The product price cannot exceed 5000!")
     @Column(name = "price")
     private Double price;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    @NotNull(message = "Тип продукту не вказано!")
-    private Type typeId;
+    @NotNull(message = "The product type must be specified!")
+    private Type type;
 
-    @NotBlank(message = "Поле для URL зображення порожнє!")
-    @URL(message = "Невірний формат для URL!")
+    @NotBlank(message = "The image URL field cannot be empty!")
+    @URL(message = "Invalid URL format!")
     @Column(name = "image_url")
     private String imageUrl;
 
-    @NotNull(message = "Потрібно вказати, чи доступний товар!")
+    @NotNull(message = "The product availability must be specified!")
     @Column(name = "is_available")
     private Boolean isAvailable;
 

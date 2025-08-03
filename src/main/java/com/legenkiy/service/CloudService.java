@@ -1,0 +1,44 @@
+package com.legenkiy.service;
+
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.legenkiy.exceprions.CloudUploadExcepiton;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+
+@Service
+public class CloudService {
+    @Value("${cloudinary.key}")
+    private String cloudinaryKey;
+    @Value("${cloudinary.secret}")
+    private String cloudinarySecret;
+    @Value("${cloudinary.name}")
+    private String cloudinaryName;
+    private Cloudinary cloudinary;
+
+
+    @PostConstruct
+    public void init(){
+        this.cloudinary = new Cloudinary("cloudinary://" + cloudinaryKey + ":" + cloudinarySecret + "@" + cloudinaryName);
+    }
+
+    public String upload(MultipartFile multipartFile, String title) {
+        try {
+            Map details = cloudinary.uploader().upload(
+                    multipartFile.getBytes(),
+                    ObjectUtils.asMap("public_id", title)
+            );
+            return details.get("secure_url").toString();
+
+        } catch (Exception e) {
+            throw new CloudUploadExcepiton("Error while uploading file to cloud storage");
+        }
+    }
+
+
+}
