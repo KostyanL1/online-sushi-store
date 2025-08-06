@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Type {
+public class ProductType {
 
     @Id
     @Column(name = "id")

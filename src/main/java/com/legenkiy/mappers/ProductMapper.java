@@ -1,23 +1,22 @@
 package com.legenkiy.mappers;
 
 
-import com.legenkiy.dao.ProductDao;
+import com.legenkiy.dto.ProductDto;
 import com.legenkiy.model.Product;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
 
-    public Product toEntity(ProductDao productDao, String imageUrl){
+    public Product toEntity(ProductDto productDto, String imageUrl){
             Product product = new Product();
-            product.setName(productDao.getName());
-            product.setDescription(productDao.getDescription());
-            product.setPrice(productDao.getPrice());
-            product.setType(productDao.getType());
+            product.setName(productDto.getName());
+            product.setDescription(productDto.getDescription());
+            product.setPrice(productDto.getPrice());
+            product.setProductType(productDto.getProductType());
             product.setImageUrl(imageUrl);
-            product.setIsAvailable(productDao.isAvailable());
+            product.setIsAvailable(productDto.isAvailable());
             return product;
-
     }
 
 }

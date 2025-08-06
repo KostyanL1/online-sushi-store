@@ -1,10 +1,10 @@
 package com.legenkiy.mappers;
 
 
-import com.legenkiy.dao.ProductDao;
+import com.legenkiy.dto.ProductDto;
 
 import com.legenkiy.model.Product;
-import com.legenkiy.model.Type;
+import com.legenkiy.model.ProductType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,17 +18,17 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMap_toEntity_whenProductDaoIsCorrect(){
-        ProductDao productDao = new ProductDao(
-                "Rolls", "Better", 255.0, new Type(1, "Rolls"),
+        ProductDto productDto = new ProductDto(
+                "Rolls", "Better", 255.0, new ProductType(1, "Rolls"),
                 null, true
         );
 
         String url = "test.url";
-        Product product = this.productMapper.toEntity(productDao, url);
-        Assertions.assertEquals(product.getName(), productDao.getName());
-        Assertions.assertEquals(product.getDescription(), productDao.getDescription());
-        Assertions.assertEquals(product.getType(), productDao.getType());
-        Assertions.assertEquals(product.getPrice(), productDao.getPrice());
+        Product product = this.productMapper.toEntity(productDto, url);
+        Assertions.assertEquals(product.getName(), productDto.getName());
+        Assertions.assertEquals(product.getDescription(), productDto.getDescription());
+        Assertions.assertEquals(product.getProductType(), productDto.getProductType());
+        Assertions.assertEquals(product.getPrice(), productDto.getPrice());
     }
 
 
