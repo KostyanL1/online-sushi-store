@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface PromotionRepositpry extends JpaRepository<Promotion, Integer> {
+public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
 
 
 }

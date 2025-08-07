@@ -6,6 +6,7 @@ import com.legenkiy.dto.ProductDto;
 import com.legenkiy.model.Product;
 import com.legenkiy.model.ProductType;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -13,11 +14,16 @@ import org.junit.jupiter.api.Test;
 
 public class ProductMapperTest {
 
-    private final ProductMapper productMapper = new ProductMapper();
+    private ProductMapper productMapper;
+
+    @BeforeEach
+    void setUp(){
+        this.productMapper = new ProductMapper();
+    }
 
 
     @Test
-    public void shouldMap_toEntity_whenProductDaoIsCorrect(){
+    void shouldMap_toEntity_whenProductDaoIsCorrect(){
         ProductDto productDto = new ProductDto(
                 "Rolls", "Better", 255.0, new ProductType(1, "Rolls"),
                 null, true
@@ -30,6 +36,12 @@ public class ProductMapperTest {
         Assertions.assertEquals(product.getProductType(), productDto.getProductType());
         Assertions.assertEquals(product.getPrice(), productDto.getPrice());
     }
+
+    @Test
+    void shouldThrow_toEntity_whenProductIsNull(){
+        Assertions.assertThrows(NullPointerException.class, () -> productMapper.toEntity(null, null));
+    }
+
 
 
 }

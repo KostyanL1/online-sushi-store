@@ -2,8 +2,8 @@ package com.legenkiy.service;
 
 
 import com.legenkiy.dto.ProductDto;
-import com.legenkiy.exceprions.ImageNotFoundException;
-import com.legenkiy.exceprions.ProductNotFoundException;
+import com.legenkiy.exceptions.ImageNotFoundException;
+import com.legenkiy.exceptions.ObjectNotFoundException;
 import com.legenkiy.mappers.ProductMapper;
 import com.legenkiy.model.Product;
 import com.legenkiy.repository.ProductRepository;
@@ -24,7 +24,7 @@ public class ProductService {
 
     public Product findById(int id) {
         return productRepository.findById(id).orElseThrow(
-                () -> new ProductNotFoundException("Product with id:" + id + " not found!"));
+                () -> new ObjectNotFoundException("Product with id:" + id + " not found!"));
     }
 
     public List<Product> findAll(){
@@ -33,7 +33,7 @@ public class ProductService {
 
     public void validateExistsById(int id){
         if (!productRepository.existsById(id))
-            throw new ProductNotFoundException("Product with id:" + id + " doesn`t exist!");
+            throw new ObjectNotFoundException("Product with id:" + id + " doesn`t exist!");
     }
 
 
@@ -41,21 +41,21 @@ public class ProductService {
         if (productDto == null) throw new IllegalArgumentException("Product must not be null!");
         if (productDto.getImage() == null || productDto.getImage().isEmpty()) throw new ImageNotFoundException("Image must be present!");
         String url = cloudService.upload(productDto.getImage(), productDto.getName());
-         Product product = productMapper.toEntity(productDto, url);
+        Product product = productMapper.toEntity(productDto, url);
         productRepository.save(product);
     }
 
-    public void deleteById(int id) throws ProductNotFoundException {
+    public void deleteById(int id) throws ObjectNotFoundException {
         validateExistsById(id);
         productRepository.deleteById(id);
     }
 
-    public void update(int id, ProductDto updatedProductDto) throws ProductNotFoundException {
+    public void update(int id, ProductDto updatedProductDto) throws ObjectNotFoundException {
         if (updatedProductDto == null) {
             throw new IllegalArgumentException("Product must not be null!");
         }
         Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Product with id " + id + " not found"));
         existingProduct.setName(updatedProductDto.getName());
         existingProduct.setDescription(updatedProductDto.getDescription());
         existingProduct.setPrice(updatedProductDto.getPrice());
