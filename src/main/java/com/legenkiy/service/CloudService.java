@@ -3,7 +3,7 @@ package com.legenkiy.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.legenkiy.exceprions.CloudUploadExcepiton;
+import com.legenkiy.exceptions.CloudUploadException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class CloudService {
             return details.get("secure_url").toString();
 
         } catch (Exception e) {
-            throw new CloudUploadExcepiton("Error while uploading file to cloud storage");
+            throw new CloudUploadException("Error while uploading file to cloud storage");
         }
     }
 

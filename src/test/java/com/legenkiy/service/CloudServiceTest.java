@@ -3,7 +3,7 @@ package com.legenkiy.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
-import com.legenkiy.exceprions.CloudUploadExcepiton;
+import com.legenkiy.exceptions.CloudUploadException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ public class CloudServiceTest {
     public void shouldThrow_upload_whenFileNotCorrect(){
         Mockito.when(cloudinary.uploader()).thenReturn(uploader);
         MockMultipartFile multipartFile = null;
-        Assertions.assertThrows(CloudUploadExcepiton.class, () -> cloudService.upload(multipartFile, "test"));
+        Assertions.assertThrows(CloudUploadException.class, () -> cloudService.upload(multipartFile, "test"));
     }
 
 
