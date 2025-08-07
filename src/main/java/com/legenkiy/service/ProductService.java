@@ -1,7 +1,7 @@
 package com.legenkiy.service;
 
 
-import com.legenkiy.dao.ProductDao;
+import com.legenkiy.dto.ProductDto;
 import com.legenkiy.exceprions.ImageNotFoundException;
 import com.legenkiy.exceprions.ProductNotFoundException;
 import com.legenkiy.mappers.ProductMapper;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.PrivilegedActionException;
 import java.util.List;
 
 
@@ -38,11 +37,11 @@ public class ProductService {
     }
 
 
-    public void save(ProductDao productDao) {
-        if (productDao == null) throw new IllegalArgumentException("Product must not be null!");
-        if (productDao.getImage() == null || productDao.getImage().isEmpty()) throw new ImageNotFoundException("Image must be present!");
-        String url = cloudService.upload(productDao.getImage(), productDao.getName());
-         Product product = productMapper.toEntity(productDao, url);
+    public void save(ProductDto productDto) {
+        if (productDto == null) throw new IllegalArgumentException("Product must not be null!");
+        if (productDto.getImage() == null || productDto.getImage().isEmpty()) throw new ImageNotFoundException("Image must be present!");
+        String url = cloudService.upload(productDto.getImage(), productDto.getName());
+         Product product = productMapper.toEntity(productDto, url);
         productRepository.save(product);
     }
 
@@ -51,20 +50,20 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void update(int id, ProductDao updatedProductDao) throws ProductNotFoundException {
-        if (updatedProductDao == null) {
+    public void update(int id, ProductDto updatedProductDto) throws ProductNotFoundException {
+        if (updatedProductDto == null) {
             throw new IllegalArgumentException("Product must not be null!");
         }
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
-        existingProduct.setName(updatedProductDao.getName());
-        existingProduct.setDescription(updatedProductDao.getDescription());
-        existingProduct.setPrice(updatedProductDao.getPrice());
-        existingProduct.setType(updatedProductDao.getType());
-        existingProduct.setIsAvailable(updatedProductDao.isAvailable());
-        MultipartFile newPhoto = updatedProductDao.getImage();
+        existingProduct.setName(updatedProductDto.getName());
+        existingProduct.setDescription(updatedProductDto.getDescription());
+        existingProduct.setPrice(updatedProductDto.getPrice());
+        existingProduct.setProductType(updatedProductDto.getProductType());
+        existingProduct.setIsAvailable(updatedProductDto.isAvailable());
+        MultipartFile newPhoto = updatedProductDto.getImage();
         if (newPhoto != null && !newPhoto.isEmpty()) {
-            String newImageUrl = cloudService.upload(newPhoto, updatedProductDao.getName());
+            String newImageUrl = cloudService.upload(newPhoto, updatedProductDto.getName());
             existingProduct.setImageUrl(newImageUrl);
         }
         productRepository.save(existingProduct);

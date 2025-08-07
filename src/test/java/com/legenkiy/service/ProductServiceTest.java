@@ -1,10 +1,10 @@
 package com.legenkiy.service;
 
-import com.legenkiy.dao.ProductDao;
+import com.legenkiy.dto.ProductDto;
 import com.legenkiy.exceprions.ProductNotFoundException;
 import com.legenkiy.mappers.ProductMapper;
 import com.legenkiy.model.Product;
-import com.legenkiy.model.Type;
+import com.legenkiy.model.ProductType;
 import com.legenkiy.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+
+// should_NameOfMethod_when
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -39,9 +41,9 @@ public class ProductServiceTest {
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file", "image.jpg", "image/jpeg", "test img".getBytes()
         );
-        ProductDao productDao = new ProductDao(
+        ProductDto productDto = new ProductDto(
                 "Sushi", "good", 250.0,
-                new Type(1, "Sushi"), multipartFile, true
+                new ProductType(1, "Sushi"), multipartFile, true
         );
         Mockito.when(cloudService.upload(Mockito.any(MultipartFile.class), Mockito.anyString()))
                 .thenReturn("https://cloudinary.com/sushi.jpg");
@@ -51,9 +53,9 @@ public class ProductServiceTest {
         product.setPrice(250.0);
         product.setImageUrl("https://cloudinary.com/sushi.jpg");
         product.setIsAvailable(true);
-        product.setType(new Type(1, "Sushi"));
+        product.setProductType(new ProductType(1, "Sushi"));
         Mockito.when(productMapper.toEntity(Mockito.any(), Mockito.anyString())).thenReturn(product);
-        productService.save(productDao);
+        productService.save(productDto);
         ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
         Mockito.verify(productRepository).save(productCaptor.capture());
         Product savedProduct = productCaptor.getValue();
@@ -73,24 +75,24 @@ public class ProductServiceTest {
     void shouldUpdateProduct_save_whenProductExists() {
         int id = 1;
         Product oldProduct = new Product(1, "Sushi", "Good", 250.0,
-                new Type(1, "Sushi"), "https://example.com/old-image.jpg", true);
+                new ProductType(1, "Sushi"), "https://example.com/old-image.jpg", true);
         MockMultipartFile mockFile = new MockMultipartFile(
                 "file", "new-image.jpg", "image/jpeg", "some-bytes".getBytes()
         );
-        ProductDao productDao = new ProductDao(
-                "Rolls", "Better", 255.0, new Type(1, "Rolls"),
+        ProductDto productDto = new ProductDto(
+                "Rolls", "Better", 255.0, new ProductType(1, "Rolls"),
                 mockFile, true
         );
         Mockito.when(productRepository.findById(id)).thenReturn(Optional.of(oldProduct));
         Mockito.when(cloudService.upload(Mockito.any(), Mockito.any()))
                 .thenReturn("https://example.com/new-image.jpg");
-        productService.update(id, productDao);
+        productService.update(id, productDto);
         Mockito.verify(productRepository).save(Mockito.argThat(savedProduct ->
                 savedProduct.getName().equals("Rolls") &&
                         savedProduct.getDescription().equals("Better") &&
                         savedProduct.getPrice().equals(255.0) &&
                         savedProduct.getImageUrl().equals("https://example.com/new-image.jpg") &&
-                        savedProduct.getType().getDescription().equals("Rolls") &&
+                        savedProduct.getProductType().getDescription().equals("Rolls") &&
                         savedProduct.getIsAvailable()
         ));
     }
@@ -99,13 +101,13 @@ public class ProductServiceTest {
     void shouldUpdateProduct_keepOldImage_whenNoNewImageProvided() {
         int id = 1;
         Product oldProduct = new Product(1, "Sushi", "Good", 250.0,
-                new Type(1, "Sushi"), "https://example.com/old-image.jpg", true);
-        ProductDao productDao = new ProductDao(
-                "Rolls", "Better", 255.0, new Type(1, "Rolls"),
+                new ProductType(1, "Sushi"), "https://example.com/old-image.jpg", true);
+        ProductDto productDto = new ProductDto(
+                "Rolls", "Better", 255.0, new ProductType(1, "Rolls"),
                 null, true
         );
         Mockito.when(productRepository.findById(id)).thenReturn(Optional.of(oldProduct));
-        productService.update(id, productDao);
+        productService.update(id, productDto);
         Mockito.verify(productRepository).save(Mockito.argThat(savedProduct ->
                 savedProduct.getImageUrl().equals("https://example.com/old-image.jpg")
         ));
@@ -113,7 +115,7 @@ public class ProductServiceTest {
 
     @Test
     void shouldThrow_update_whenMissingProduct() {
-        ProductDao dummy = new ProductDao("X", "Y", 100.0, new Type(1, "Z"), null, true);
+        ProductDto dummy = new ProductDto("X", "Y", 100.0, new ProductType(1, "Z"), null, true);
         Mockito.when(productRepository.findById(0)).thenReturn(Optional.empty());
         Assertions.assertThrows(ProductNotFoundException.class,
                 () -> productService.update(0, dummy));
@@ -128,7 +130,7 @@ public class ProductServiceTest {
     @Test
     void shouldReturnProduct_findById_whenIdIsCorrect() {
         Product product = new Product(1, "Sushi", "good", 250.0,
-                new Type(1, "Sushi"), "https://example.com/placeholder.png", true);
+                new ProductType(1, "Sushi"), "https://example.com/placeholder.png", true);
         Mockito.when(productRepository.findById(1)).thenReturn(Optional.of(product));
         Product result = productService.findById(1);
         Assertions.assertEquals(product, result);

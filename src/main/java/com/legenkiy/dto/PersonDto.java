@@ -1,34 +1,33 @@
-package com.legenkiy.model;
+package com.legenkiy.dto;
 
 import com.legenkiy.model.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "person")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Person {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "name")
+public class PersonDto {
+
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
-    @Column(name = "cell_number")
+
+    @NotBlank(message = "Phone number cannot be blank")
     @Pattern(
             regexp = "^380[0-9]{9}$",
             message = "Phone number must be in the format 380XXXXXXXXX"
     )
     private String cellNumber;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+
+    @NotNull(message = "Role must be provided")
     private Role role;
-    @Column(name = "is_verified")
-    private boolean isVerified;
 
 }

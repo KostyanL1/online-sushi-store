@@ -1,18 +1,18 @@
-package com.legenkiy.dao;
+package com.legenkiy.dto;
 
-import com.legenkiy.model.Type;
-import jakarta.persistence.Column;
+import com.legenkiy.annotations.ImageSize;
+import com.legenkiy.annotations.ImageType;
+import com.legenkiy.model.ProductType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDao {
+public class ProductDto {
     @NotBlank(message = "Product name must not be empty!")
     @Size(min = 3, max = 25, message = "Product name must be between 3 and 25 characters long!")
     private String name;
@@ -27,9 +27,11 @@ public class ProductDao {
     private Double price;
 
     @NotNull(message = "Product type must be specified!")
-    private Type type;
+    private ProductType productType;
 
-    @NotBlank(message = "Product image file must be provided!")
+    @NotNull(message = "Product image file must be provided!")
+    @ImageSize(maxSize = 2 * 1024 * 1024, message = "Image size cannot be larger than 2 MB!")
+    @ImageType(types = {"image/jpeg", "image/png"}, message = "The image can only be in png or jpeg format!")
     private MultipartFile image;
 
     @NotNull(message = "Product availability must be indicated!")
