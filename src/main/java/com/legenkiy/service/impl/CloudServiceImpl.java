@@ -1,9 +1,10 @@
-package com.legenkiy.service;
+package com.legenkiy.service.impl;
 
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.legenkiy.exceptions.CloudUploadException;
+import com.legenkiy.service.api.CloudService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 @Service
-public class CloudService {
+public class CloudServiceImpl implements CloudService {
     @Value("${cloudinary.key}")
     private String cloudinaryKey;
     @Value("${cloudinary.secret}")
@@ -27,6 +28,7 @@ public class CloudService {
         this.cloudinary = new Cloudinary("cloudinary://" + cloudinaryKey + ":" + cloudinarySecret + "@" + cloudinaryName);
     }
 
+    @Override
     public String upload(MultipartFile multipartFile, String title) {
         try {
             Map details = cloudinary.uploader().upload(

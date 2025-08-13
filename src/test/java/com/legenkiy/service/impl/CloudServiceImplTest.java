@@ -1,4 +1,4 @@
-package com.legenkiy.service;
+package com.legenkiy.service.impl;
 
 
 import com.cloudinary.Cloudinary;
@@ -23,7 +23,7 @@ import java.util.Map;
 // should_NameOfMethod_when
 
 @ExtendWith(MockitoExtension.class)
-public class CloudServiceTest {
+public class CloudServiceImplTest {
 
     @Mock
     private Cloudinary cloudinary;
@@ -32,11 +32,11 @@ public class CloudServiceTest {
     private Uploader uploader;
 
     @InjectMocks
-    private CloudService cloudService;
+    private CloudServiceImpl cloudServiceImpl;
 
     @BeforeEach
     public void setUp(){
-        ReflectionTestUtils.setField(cloudService, "cloudinary", cloudinary);
+        ReflectionTestUtils.setField(cloudServiceImpl, "cloudinary", cloudinary);
     }
 
 
@@ -50,7 +50,7 @@ public class CloudServiceTest {
         Map<String, Object> mockResult = new HashMap<>();
         mockResult.put("secure_url", "test url");
         Mockito.when(uploader.upload(Mockito.any(byte[].class), Mockito.anyMap())).thenReturn(mockResult);
-        String url = cloudService.upload(multipartFile, "test");
+        String url = cloudServiceImpl.upload(multipartFile, "test");
         Assertions.assertEquals("test url", url);
     }
 
@@ -58,7 +58,7 @@ public class CloudServiceTest {
     public void shouldThrow_upload_whenFileNotCorrect(){
         Mockito.when(cloudinary.uploader()).thenReturn(uploader);
         MockMultipartFile multipartFile = null;
-        Assertions.assertThrows(CloudUploadException.class, () -> cloudService.upload(multipartFile, "test"));
+        Assertions.assertThrows(CloudUploadException.class, () -> cloudServiceImpl.upload(multipartFile, "test"));
     }
 
 

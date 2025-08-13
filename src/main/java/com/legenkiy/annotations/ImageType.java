@@ -1,7 +1,8 @@
 package com.legenkiy.annotations;
 
 
-import com.legenkiy.validation.ImageSizeValidator;
+
+import com.legenkiy.validation.ImageTypeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -10,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ImageSizeValidator.class)
+@Constraint(validatedBy = ImageTypeValidator.class)
 
 public @interface ImageType {
 

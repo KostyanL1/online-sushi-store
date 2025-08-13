@@ -5,7 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +13,10 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PersonalDetailsImpl implements UserDetails {
 
     private String name;

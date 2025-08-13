@@ -2,16 +2,15 @@ package com.legenkiy.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table(name = "product")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 
 public class Product {
     @Id

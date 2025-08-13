@@ -2,9 +2,7 @@ package com.legenkiy.model.cart;
 
 import com.legenkiy.model.Person;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "cart")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart{
