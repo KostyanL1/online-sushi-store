@@ -1,4 +1,4 @@
-package com.legenkiy.service;
+package com.legenkiy.service.impl;
 
 
 import com.legenkiy.model.Person;
@@ -18,12 +18,12 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 
-public class PersonalDetailsServiceTest {
+public class PersonalDetailsServiceImplTest {
 
     @Mock
     private PersonRepository personRepository;
     @InjectMocks
-    private  PersonalDetailsService personalDetailsService;
+    private PersonalDetailsServiceImpl personalDetailsServiceImpl;
 
     @Test
     public void loadUserByUsername_withExistUser(){
@@ -31,7 +31,7 @@ public class PersonalDetailsServiceTest {
 
         Mockito.when(personRepository.findByCellNumber("3803562389230")).thenReturn(Optional.of(person));
 
-        UserDetails userDetails = personalDetailsService.loadUserByUsername("3803562389230");
+        UserDetails userDetails = personalDetailsServiceImpl.loadUserByUsername("3803562389230");
         Assertions.assertEquals(person.getCellNumber(), userDetails.getUsername());
         Assertions.assertEquals(person.getRole(), Role.USER);
     }
@@ -39,7 +39,7 @@ public class PersonalDetailsServiceTest {
     public void loadUserByUsername_withNotExistUser(){
 
         Mockito.when(personRepository.findByCellNumber("3803562389230")).thenReturn(Optional.empty());
-        Assertions.assertThrows( UsernameNotFoundException.class, () -> personalDetailsService.loadUserByUsername("3803562389230"));
+        Assertions.assertThrows( UsernameNotFoundException.class, () -> personalDetailsServiceImpl.loadUserByUsername("3803562389230"));
     }
 
 }

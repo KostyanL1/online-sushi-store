@@ -1,4 +1,4 @@
-package com.legenkiy.service;
+package com.legenkiy.service.impl;
 
 
 import com.legenkiy.model.Person;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PersonalDetailsService implements UserDetailsService {
+public class PersonalDetailsServiceImpl implements UserDetailsService {
 
     private final PersonRepository personRepository;
 

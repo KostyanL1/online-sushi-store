@@ -5,15 +5,14 @@ import com.legenkiy.annotations.ImageType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class PromotionDto {
     @NotBlank(message = "The promotion title field cannot be empty!")
     @Size(min = 3, max = 25, message = "The promotion title must be between 3 and 25 characters long!")

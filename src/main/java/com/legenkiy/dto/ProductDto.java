@@ -4,12 +4,11 @@ import com.legenkiy.annotations.ImageSize;
 import com.legenkiy.annotations.ImageType;
 import com.legenkiy.model.ProductType;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDto {

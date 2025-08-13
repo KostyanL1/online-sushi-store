@@ -1,4 +1,4 @@
-package com.legenkiy.service;
+package com.legenkiy.service.impl;
 
 import com.legenkiy.dto.ProductDto;
 import com.legenkiy.exceptions.ObjectNotFoundException;
@@ -22,19 +22,19 @@ import java.util.Optional;
 // should_NameOfMethod_when
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+public class ProductServiceImplTest {
 
     @Mock
     private ProductRepository productRepository;
 
     @Mock
-    private CloudService cloudService;
+    private CloudServiceImpl cloudServiceImpl;
 
     @Mock
     private ProductMapper productMapper;
 
     @InjectMocks
-    private ProductService productService;
+    private ProductServiceImpl productServiceImpl;
 
     @Test
     void shouldSaveProduct_save_whenProductPresent() {
@@ -46,7 +46,7 @@ public class ProductServiceTest {
                 new ProductType(1, "Sushi"), multipartFile, true
         );
         String uploadedImageUrl = "https://cloudinary.com/sushi.jpg";
-        Mockito.when(cloudService.upload(Mockito.any(MultipartFile.class), Mockito.anyString()))
+        Mockito.when(cloudServiceImpl.upload(Mockito.any(MultipartFile.class), Mockito.anyString()))
                 .thenReturn(uploadedImageUrl);
         Mockito.when(productMapper.toEntity(Mockito.any(), Mockito.eq(uploadedImageUrl)))
                 .thenAnswer(invocation -> {
@@ -60,7 +60,7 @@ public class ProductServiceTest {
                     product.setProductType(dto.getProductType());
                     return product;
                 });
-        productService.save(productDto);
+        productServiceImpl.save(productDto);
         ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
         Mockito.verify(productRepository).save(productCaptor.capture());
         Product savedProduct = productCaptor.getValue();
@@ -74,7 +74,7 @@ public class ProductServiceTest {
 
     @Test
     void shouldThrow_save_whenProductNotPresent() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> productService.save(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> productServiceImpl.save(null));
     }
 
     @Test
@@ -90,9 +90,9 @@ public class ProductServiceTest {
                 mockFile, true
         );
         Mockito.when(productRepository.findById(id)).thenReturn(Optional.of(oldProduct));
-        Mockito.when(cloudService.upload(Mockito.any(), Mockito.any()))
+        Mockito.when(cloudServiceImpl.upload(Mockito.any(), Mockito.any()))
                 .thenReturn("https://example.com/new-image.jpg");
-        productService.update(id, productDto);
+        productServiceImpl.update(id, productDto);
         Mockito.verify(productRepository).save(Mockito.argThat(savedProduct ->
                 savedProduct.getName().equals("Rolls") &&
                         savedProduct.getDescription().equals("Better") &&
@@ -113,7 +113,7 @@ public class ProductServiceTest {
                 null, true
         );
         Mockito.when(productRepository.findById(id)).thenReturn(Optional.of(oldProduct));
-        productService.update(id, productDto);
+        productServiceImpl.update(id, productDto);
         Mockito.verify(productRepository).save(Mockito.argThat(savedProduct ->
                 savedProduct.getImageUrl().equals("https://example.com/old-image.jpg")
         ));
@@ -124,13 +124,13 @@ public class ProductServiceTest {
         ProductDto productDto = new ProductDto("X", "Y", 100.0, new ProductType(1, "Z"), null, true);
         Mockito.when(productRepository.findById(0)).thenReturn(Optional.empty());
         Assertions.assertThrows(ObjectNotFoundException.class,
-                () -> productService.update(0, productDto));
+                () -> productServiceImpl.update(0, productDto));
     }
 
     @Test
     void shouldThrow_update_whenProductIsNull() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> productService.update(0, null));
+                () -> productServiceImpl.update(0, null));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class ProductServiceTest {
         Product product = new Product(1, "Sushi", "good", 250.0,
                 new ProductType(1, "Sushi"), "https://example.com/placeholder.png", true);
         Mockito.when(productRepository.findById(1)).thenReturn(Optional.of(product));
-        Product result = productService.findById(1);
+        Product result = productServiceImpl.findById(1);
         Assertions.assertEquals(product, result);
         Mockito.verify(productRepository).findById(1);
     }
@@ -147,13 +147,13 @@ public class ProductServiceTest {
     void shouldThrow_findById_whenIdNotCorrect() {
         Mockito.when(productRepository.findById(0)).thenReturn(Optional.empty());
         Assertions.assertThrows(ObjectNotFoundException.class,
-                () -> productService.findById(0));
+                () -> productServiceImpl.findById(0));
     }
 
     @Test
     void shouldDelete_deleteById_whenIdIsCorrect() {
         Mockito.when(productRepository.existsById(1)).thenReturn(true);
-        productService.deleteById(1);
+        productServiceImpl.deleteById(1);
         Mockito.verify(productRepository).deleteById(1);
     }
 
@@ -161,12 +161,12 @@ public class ProductServiceTest {
     void shouldThrow_validateExistsById_whenProductNonExist() {
         Mockito.when(productRepository.existsById(0)).thenReturn(false);
         Assertions.assertThrows(ObjectNotFoundException.class,
-                () -> productService.validateExistsById(0));
+                () -> productServiceImpl.validateExistsById(0));
     }
 
     @Test
     void shouldReturn_findAll() {
-        productService.findAll();
+        productServiceImpl.findAll();
         Mockito.verify(productRepository).findAll();
     }
 }

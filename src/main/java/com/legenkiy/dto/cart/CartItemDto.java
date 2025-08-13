@@ -1,19 +1,19 @@
-package com.legenkiy.dto;
+package com.legenkiy.dto.cart;
 
+import com.legenkiy.dto.ProductDto;
 import com.legenkiy.model.Product;
 import com.legenkiy.model.cart.Cart;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItemDto {
-    private Cart cart;
-    private Product product;
+    private CartDto cartDto;
+    private ProductDto productDto;
     @Min(value = 1)
     private int quantity;
 }
